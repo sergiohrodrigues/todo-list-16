@@ -22,7 +22,7 @@ import { TodoSignalsService } from 'src/app/services/todo-signals.service';
     MatTabsModule
   ],
   templateUrl: './todo-card.component.html',
-  styleUrls: ['./todo-card.component.scss']
+  styleUrls: []
 })
 export class TodoCardComponent implements OnInit {
   private todoSignalsService = inject(TodoSignalsService);
