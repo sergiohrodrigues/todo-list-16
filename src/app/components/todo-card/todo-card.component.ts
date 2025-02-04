@@ -27,7 +27,7 @@ import { TodoSignalsService } from 'src/app/services/todo-signals.service';
 export class TodoCardComponent implements OnInit {
   private todoSignalsService = inject(TodoSignalsService);
   private todosSignal = this.todoSignalsService.todosState;
-  private todoList = computed(() => this.todosSignal());
+  public todosList = computed(() => this.todosSignal());
 
   ngOnInit(): void {
     this.getTodosInLocalStorage();
@@ -53,7 +53,7 @@ export class TodoCardComponent implements OnInit {
 
   public handleDeleteTodo(todo: Todo): void {
     if(todo){
-      const index = this.todoList().indexOf(todo);
+      const index = this.todosList().indexOf(todo);
 
       if(index !== -1){
         this.todosSignal.mutate((todos) => {
