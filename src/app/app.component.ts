@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoCardComponent } from './components/todo-card/todo-card.component';
 import { SchoolData, SchoolService } from './services/school.service';
-import { Observable, Subject, takeUntil, zip } from 'rxjs';
+import { from, map, Observable, of, Subject, takeUntil, zip } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { Observable, Subject, takeUntil, zip } from 'rxjs';
     CommonModule,
     HeaderComponent,
     TodoCardComponent,
-],
+  ],
   templateUrl: './app.component.html',
   styleUrls: []
 })
@@ -24,16 +24,43 @@ export class AppComponent implements OnInit {
   public teachers: Array<SchoolData>= [];
   private readonly destroy$: Subject<void> = new Subject();
 
+  private ages = of(20, 30, 40, 50, 60, 70);
+  private peoplesDatas = from([
+    { name: 'Marcos Junior', idade : 20, profession: 'Software Developer' },
+    { name: 'Sergio Rodrigues', idade : 30, profession: 'Fullstack Developer' },
+    { name: 'Thiago Queiroz', idade : 21, profession: 'Backend Developer' },
+  ])
+
   private zipSchoolResponse$ = zip(
     this.getStudentsDatas(),
     this.getTeachersDatas()
   );
 
   ngOnInit(): void {
-    this.getSchoolDatas();
+    // this.getSchoolDatas();
+    // this.getMultiplieAges();
+    this.getPeopleProfessions()
   }
 
-  getSchoolDatas() {
+  getMultiplieAges() {
+    this.ages.pipe(map((age) => age * 2)).subscribe({
+      next: (response) => {
+        console.log(response)
+      }
+    })
+  }
+
+  getPeopleProfessions(): void {
+    this.peoplesDatas
+    .pipe(map((people) => people.profession))
+    .subscribe({
+      next: (response) => {
+        console.log('PROFISSÃO ', response)
+      }
+    })
+  }
+
+  getSchoolDatas(): void {
     this.zipSchoolResponse$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -51,4 +78,5 @@ export class AppComponent implements OnInit {
   getTeachersDatas(): Observable<Array<SchoolData>> {
     return this.schoolService.getTeachers();
   }
+
 }
