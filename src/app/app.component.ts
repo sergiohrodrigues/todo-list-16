@@ -1,9 +1,11 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoCardComponent } from './components/todo-card/todo-card.component';
 import { SchoolData, SchoolService } from './services/school.service';
 import { filter, from, map, Observable, of, Subject, switchMap, takeUntil, zip } from 'rxjs';
+import { TodoSignalsService } from './services/todo-signals.service';
+import { Todo } from './models/model/todo.model';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +15,7 @@ import { filter, from, map, Observable, of, Subject, switchMap, takeUntil, zip }
     HeaderComponent,
     TodoCardComponent,
   ],
+  animations: [],
   templateUrl: './app.component.html',
   styleUrls: []
 })
@@ -117,12 +120,22 @@ export class AppComponent
   //   return this.schoolService.getTeachers();
   // }
 
-  title = 'todo-list-16';
 
   @Input() public projectName!: string;
   @Output() outputEvent = new EventEmitter<string>();
+  public title = 'todo-list-16';
+  public todoSignal!: WritableSignal<Todo[]>;
+
+  constructor(private todoSignalsService: TodoSignalsService){}
 
   public handleEmitEvent(): void {
     this.outputEvent.emit(this.projectName);
+  }
+
+  public handleCreateTodo(todo: Todo): void {
+    if(todo){
+      this.todoSignalsService.updateTodos(todo);
+      this.todoSignal = this.todoSignalsService.todosState;
+    }
   }
 }

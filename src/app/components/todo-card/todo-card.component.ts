@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { TodoKeyLocalStorage } from 'src/app/models/enum/TodoKeyLocalStorage';
 import { Todo } from 'src/app/models/model/todo.model';
 import { TodoSignalsService } from 'src/app/services/todo-signals.service';
@@ -19,7 +21,8 @@ import { TodoSignalsService } from 'src/app/services/todo-signals.service';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTooltipModule
   ],
   templateUrl: './todo-card.component.html',
   styleUrls: []
@@ -42,14 +45,23 @@ export class TodoCardComponent implements OnInit {
     this.todoSignalsService.saveTodoInLocalStorage();
   }
 
-  public handleDoneTodo(todoId: number): void {
-    if(todoId){
-      this.todosSignal.mutate((todos) => {
-        const todoSelected = todos.find((todo) => todo.id === todoId) as Todo;
-        todoSelected && (todoSelected.done = true);
-        this.saveTodosInLocalStorage();
-      })
+  public handleDoneTodo(todoId: number, completed: boolean): void {
+    if(completed){
+      this.updateStateTodo(todoId, completed)
+      return;
     }
+
+    if(todoId){
+      this.updateStateTodo(todoId, completed)
+    }
+  }
+
+  public updateStateTodo(todoId: number, completed: boolean){
+    this.todosSignal.mutate((todos) => {
+      const todoSelected = todos.find((todo) => todo.id === todoId) as Todo;
+      todoSelected && (todoSelected.done = completed);
+      this.saveTodosInLocalStorage();
+    })
   }
 
   public handleDeleteTodo(todo: Todo): void {

@@ -16,7 +16,8 @@
             class="header_btn check-btn"
             mat-icon-button
             aria-label="Concluir Tarefa"
-            (click)="handleDoneTodo(todo.id)"
+            matTooltip="Concluir Tarefa"
+            (click)="handleDoneTodo(todo.id, true)"
           >
             <mat-icon>done_all</mat-icon>
           </button>
@@ -24,6 +25,7 @@
             class="header_btn check-btn todo_form_delete_btn"
             mat-icon-button
             aria-label="Remover Tarefa"
+            matTooltip="Remover Tarefa"
             (click)="handleDeleteTodo(todo)"
           >
             <mat-icon>delete_forever</mat-icon>
@@ -50,7 +52,8 @@
             class="header_btn check_btn"
             mat-icon-button
             aria-label="Concluir Tarefa"
-            (click)="handleDoneTodo(todo.id)"
+            matTooltip="Voltar Tarefa"
+            (click)="handleDoneTodo(todo.id, false)"
           >
             <mat-icon>done_all</mat-icon>
           </button>
@@ -58,6 +61,7 @@
             class="header_btn check_btn todo_form_delete_btn"
             mat-icon-button
             aria-label="Deletar Tarefa"
+            matTooltip="Deletar Tarefa"
             (click)="handleDeleteTodo(todo)"
           >
             <mat-icon>delete_forever</mat-icon>
