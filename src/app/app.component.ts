@@ -126,6 +126,8 @@ export class AppComponent
   public title = 'todo-list-16';
   public todoSignal!: WritableSignal<Todo[]>;
 
+  public renderTestMessage: boolean = false;
+
   constructor(private todoSignalsService: TodoSignalsService){}
 
   public handleEmitEvent(): void {
