@@ -125,6 +125,7 @@ export class AppComponent
   @Output() outputEvent = new EventEmitter<string>();
   public title = 'todo-list-16';
   public todoSignal!: WritableSignal<Todo[]>;
+  public isDoned = false;
 
   public renderTestMessage: boolean = false;
 
@@ -139,5 +140,11 @@ export class AppComponent
       this.todoSignalsService.updateTodos(todo);
       this.todoSignal = this.todoSignalsService.todosState;
     }
+  }
+
+  public handleCheckIsDone(): void {
+    setTimeout(() => {
+      this.isDoned = true;
+    }, 200)
   }
 }
