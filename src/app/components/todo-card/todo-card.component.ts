@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TodoKeyLocalStorage } from 'src/app/models/enum/TodoKeyLocalStorage';
 import { Todo } from 'src/app/models/model/todo.model';
 import { TodoSignalsService } from 'src/app/services/todo-signals.service';
+import { CustomUpperCasePipe } from 'src/app/shared/pipes/customUpperCase.pipe';
 
 @Component({
   selector: 'app-todo-card',
@@ -22,7 +23,8 @@ import { TodoSignalsService } from 'src/app/services/todo-signals.service';
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    CustomUpperCasePipe
   ],
   templateUrl: './todo-card.component.html',
   styleUrls: []
