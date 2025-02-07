@@ -6,9 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TodoSignalsService } from 'src/app/services/todo-signals.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { HeaderComponent } from '../header/header.component';
+
+import { TodoSignalsService } from 'src/app/services/todo-signals.service';
+import { NotificationCard } from 'src/app/services/notification-card.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-todo-form',
@@ -20,14 +23,17 @@ import { HeaderComponent } from '../header/header.component';
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './todo-form.component.html',
-  styleUrls: []
+  styleUrls: [],
+  providers: [NotificationCard, MatSnackBar]
+
 })
 export class TodoFormComponent {
   private todoSignalsService = inject(TodoSignalsService);
-  private dialogRefService = inject(MatDialogRef<HeaderComponent>)
+  private dialogRefService = inject(MatDialogRef<HeaderComponent>);
+  public notification = inject(NotificationCard);
   public allTodos = this.todoSignalsService.todosState();
 
   public todosForm = new FormGroup({
@@ -44,6 +50,9 @@ export class TodoFormComponent {
 
       this.todoSignalsService.updateTodos({id, title, description, done})
       this.dialogRefService.close();
+      setTimeout(() => {
+        this.notification.openSnackBar("Item criado com sucesso!")
+      }, 200)
     }
   }
 

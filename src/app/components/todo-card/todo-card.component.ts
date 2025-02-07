@@ -6,11 +6,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatSelectModule} from '@angular/material/select';
 
 import { TodoKeyLocalStorage } from 'src/app/models/enum/TodoKeyLocalStorage';
 import { Todo } from 'src/app/models/model/todo.model';
 import { TodoSignalsService } from 'src/app/services/todo-signals.service';
 import { CustomUpperCasePipe } from 'src/app/shared/pipes/customUpperCase.pipe';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NotificationCard } from 'src/app/services/notification-card.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Notification } from 'src/app/models/enum/Notification';
 
 @Component({
   selector: 'app-todo-card',
@@ -24,13 +30,18 @@ import { CustomUpperCasePipe } from 'src/app/shared/pipes/customUpperCase.pipe';
     MatIconModule,
     MatTabsModule,
     MatTooltipModule,
-    CustomUpperCasePipe
+    CustomUpperCasePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule
   ],
   templateUrl: './todo-card.component.html',
-  styleUrls: []
+  styleUrls: [],
+  providers: [NotificationCard, MatSnackBar]
 })
 export class TodoCardComponent implements OnInit {
   private todoSignalsService = inject(TodoSignalsService);
+  private notification = inject(NotificationCard);
   private todosSignal = this.todoSignalsService.todosState;
   public todosList = computed(() => this.todosSignal());
 
@@ -50,10 +61,12 @@ export class TodoCardComponent implements OnInit {
   public handleDoneTodo(todoId: number, completed: boolean): void {
     if(completed){
       this.updateStateTodo(todoId, completed)
+        this.notification.openSnackBar(Notification.CONCLUDED)
       return;
     }
 
     if(todoId){
+      this.notification.openSnackBar(Notification.IN_PROGRESS)
       this.updateStateTodo(todoId, completed)
     }
   }
@@ -75,6 +88,7 @@ export class TodoCardComponent implements OnInit {
           todos.splice(index, 1);
           this.saveTodosInLocalStorage();
         })
+        this.notification.openSnackBar(Notification.REMOVED)
       }
     }
   }
