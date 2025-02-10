@@ -19,6 +19,23 @@ export class TodoSignalsService {
     }
   }
 
+  public editTodo({ id, title, description, done}: Todo){
+    if((id && title && description !== null) || undefined ){
+      this.todosState.mutate((todos) => {
+        if(todos !== null){
+          const todoIndex = todos.findIndex(todo => todo.id === id);
+
+          if(todoIndex !== -1){
+            todos[todoIndex].title = title;
+            todos[todoIndex].description = description;
+            todos[todoIndex].done = done;
+          }
+        }
+      })
+      this.saveTodoInLocalStorage();
+    }
+  }
+
   public saveTodoInLocalStorage(): void {
     const todos = JSON.stringify(this.todosState());
     localStorage.setItem(TodoKeyLocalStorage.TODO_LIST, todos);

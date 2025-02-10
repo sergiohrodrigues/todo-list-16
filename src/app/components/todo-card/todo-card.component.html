@@ -22,6 +22,15 @@
             <mat-icon>done_all</mat-icon>
           </button>
           <button
+            class="header_btn check-btn todo_form_edit_btn"
+            mat-icon-button
+            aria-label="Editar Tarefa"
+            matTooltip="Editar Tarefa"
+            (click)="handleUpdateTodo(todo.id)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
             class="header_btn check-btn todo_form_delete_btn"
             mat-icon-button
             aria-label="Remover Tarefa"
@@ -42,7 +51,7 @@
           <mat-card-title class="todo_card_title">
             {{ todo.title }}
           </mat-card-title>
-          <mat-card-subtitle class="todo_card_title">
+          <mat-card-subtitle class="todo_card_subtitle">
             {{ todo.description }}
           </mat-card-subtitle>
         </mat-card-header>

@@ -17,6 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { NotificationCard } from 'src/app/services/notification-card.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Notification } from 'src/app/models/enum/Notification';
+import { TodoFormComponent } from '../todo-form/todo-form.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-todo-card',
@@ -42,6 +44,7 @@ import { Notification } from 'src/app/models/enum/Notification';
 export class TodoCardComponent implements OnInit {
   private todoSignalsService = inject(TodoSignalsService);
   private notification = inject(NotificationCard);
+  private dialogService = inject(MatDialog);
   private todosSignal = this.todoSignalsService.todosState;
   public todosList = computed(() => this.todosSignal());
 
@@ -77,6 +80,19 @@ export class TodoCardComponent implements OnInit {
       todoSelected && (todoSelected.done = completed);
       this.saveTodosInLocalStorage();
     })
+  }
+
+  handleUpdateTodo(todoId: number) {
+    const todoSelected = this.todosSignal().find(item => item.id === todoId);
+
+    this.dialogService.open(TodoFormComponent, {
+      width: '50vw',
+      maxHeight: '80vh',
+      data: {
+        todoSelected
+      }
+    })
+
   }
 
   public handleDeleteTodo(todo: Todo): void {
